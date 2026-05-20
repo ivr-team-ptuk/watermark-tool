@@ -116,11 +116,24 @@ def insert_watermark(
     w = rect.width
     h = rect.height
 
+    min_dim = min(w, h)
+
     rotation = calculate_rotation(w, h)
 
-    font_size = calculate_font_size(w, h)
-
     matrix = fitz.Matrix(1,1).prerotate(rotation)
+
+    # =========================
+    # RESPONSIVE SIZES
+    # =========================
+
+    corner_text_size = min_dim * 0.045
+    corner_logo_size = min_dim * 0.18
+
+    repeat_text_size = min_dim * 0.06
+    repeat_logo_size = min_dim * 0.22
+
+    repeat_step_x = repeat_logo_size * 1.8
+    repeat_step_y = repeat_logo_size * 1.5
 
     # =========================
     # DRAW TEXT
@@ -155,76 +168,93 @@ def insert_watermark(
         )
 
     # =========================
-    # CORNERS MODE
+    # CORNER MODE
     # =========================
 
     if mode == "في الزاوية":
 
-        points = [
-            (w-150, h-120)
-        ]
+        margin = min_dim * 0.04
 
-        for p in points:
+        # =========================
+        # TEXT
+        # =========================
 
-            if wm_type == "نص":
+        if wm_type == "نص":
 
-                draw_text(
-                    p,
-                    font_size/2
+            text_x = w - (corner_text_size * 5.5)
+            text_y = h - margin
+
+            draw_text(
+                (text_x, text_y),
+                corner_text_size
+            )
+
+        # =========================
+        # LOGO
+        # =========================
+
+        else:
+
+            size = corner_logo_size
+
+            draw_image(
+                fitz.Rect(
+                    w - size - margin,
+                    h - size - margin,
+                    w - margin,
+                    h - margin
                 )
-
-            else:
-
-                draw_image(
-                    fitz.Rect(
-                        p[0],
-                        p[1],
-                        p[0]+120,
-                        p[1]+120
-                    )
-                )
+            )
 
     # =========================
-    # ADAPTIVE DIAGONAL
+    # REPEAT MODE
     # =========================
 
     elif mode == "تكراري":
 
-        x = 0
+        x = -repeat_logo_size
 
-        while x < w:
+        while x < w + repeat_logo_size:
 
-            y = 0
+            y = -repeat_logo_size
 
-            while y < h:
+            while y < h + repeat_logo_size:
+
+                # =========================
+                # TEXT
+                # =========================
 
                 if wm_type == "نص":
 
                     draw_text(
-                        (x,y),
-                        font_size,
+                        (x, y),
+                        repeat_text_size,
                         matrix
                     )
 
+                # =========================
+                # LOGO
+                # =========================
+
                 else:
 
-                    size = font_size * 3
+                    size = repeat_logo_size
 
                     draw_image(
                         fitz.Rect(
                             x,
                             y,
-                            x+size,
-                            y+size
+                            x + size,
+                            y + size
                         )
                     )
 
-                y += 120
+                y += repeat_step_y
 
-            x += 180
+            x += repeat_step_x
 
     # =========================
-    # FULL PAGE
+    # FULL PAGE MODE
     # =========================
 
     elif mode == "كامل الصفحة":
@@ -238,6 +268,10 @@ def insert_watermark(
             h
         )
 
+        # =========================
+        # TEXT
+        # =========================
+
         if wm_type == "نص":
 
             draw_text(
@@ -246,9 +280,13 @@ def insert_watermark(
                 matrix
             )
 
+        # =========================
+        # LOGO
+        # =========================
+
         else:
 
-            margin = 40
+            margin = min_dim * 0.06
 
             draw_image(
                 fitz.Rect(
@@ -258,7 +296,7 @@ def insert_watermark(
                     h - margin
                 )
             )
-
+            
 # =========================
 # LIVE PREVIEW
 # =========================
