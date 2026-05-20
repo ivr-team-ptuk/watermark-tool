@@ -18,23 +18,6 @@ st.title("تعليم ملفات PDF - IVR Scientific")
 st.caption("يتم تحديث المعاينة تلقائيًا عند تغيير الإعدادات")
 
 # =========================
-# SETTINGS
-# =========================
-
-logo_options = {
-    "10%": "logos/logo_10.png",
-    "20%": "logos/logo_20.png",
-    "30%": "logos/logo_30.png",
-    "40%": "logos/logo_40.png",
-    "50%": "logos/logo_50.png",
-    "60%": "logos/logo_60.png",
-    "70%": "logos/logo_70.png",
-    "80%": "logos/logo_80.png",
-    "90%": "logos/logo_90.png",
-    "100%": "logos/logo_100.png"
-}
-
-# =========================
 # UI
 # =========================
 
@@ -51,15 +34,6 @@ watermark_type = st.selectbox(
 
 watermark_text = "IVR TEAM"
 
-selected_logo = None
-
-if watermark_type == "شعار":
-
-    selected_logo = st.selectbox(
-        "اختر شفافية الشعار",
-        list(logo_options.keys())
-    )
-
 mode = st.selectbox(
     "الوضعية",
     [
@@ -69,12 +43,27 @@ mode = st.selectbox(
     ]
 )
 
-opacity = st.slider(
-    "شفافية النص",
-    min_value=0.01,
-    max_value=0.50,
-    value=0.10
-)
+# =========================
+# OPACITY SLIDER
+# =========================
+
+if watermark_type == "نص":
+
+    opacity = st.slider(
+        "شفافية النص",
+        min_value=0.01,
+        max_value=0.50,
+        value=0.10
+    )
+
+else:
+
+    opacity = st.slider(
+        "شفافية الشعار",
+        min_value=0.01,
+        max_value=1.00,
+        value=0.10
+    )
 
 # =========================
 # HELPERS
@@ -92,6 +81,22 @@ def calculate_font_size(width, height):
     diagonal = math.sqrt(width**2 + height**2)
 
     return diagonal / 18
+
+# =========================
+# GET LOGO PATH
+# =========================
+
+def get_logo_path(opacity):
+
+    percentage = int(opacity * 100)
+
+    if percentage < 1:
+        percentage = 1
+
+    if percentage > 100:
+        percentage = 100
+
+    return f"logos/logo_{percentage}.png"
 
 # =========================
 # WATERMARK FUNCTION
@@ -145,7 +150,8 @@ def insert_watermark(
         page.insert_image(
             r,
             stream=image_bytes,
-            overlay=True
+            overlay=True,
+            keep_proportion=True
         )
 
     # =========================
@@ -242,14 +248,14 @@ def insert_watermark(
 
         else:
 
-            size = diagonal
+            margin = 40
 
             draw_image(
                 fitz.Rect(
-                    start_point[0],
-                    start_point[1]-size,
-                    start_point[0]+size,
-                    start_point[1]
+                    margin,
+                    margin,
+                    w - margin,
+                    h - margin
                 )
             )
 
@@ -284,7 +290,7 @@ if uploaded_pdfs:
 
         if watermark_type == "شعار":
 
-            image_path = logo_options[selected_logo]
+            image_path = get_logo_path(opacity)
 
             with open(image_path, "rb") as f:
 
@@ -367,12 +373,12 @@ if st.button("إنشاء وتحميل"):
             image_bytes = None
 
             # =========================
-            # LOAD BUILT-IN LOGO
+            # LOAD LOGO
             # =========================
 
             if watermark_type == "شعار":
 
-                image_path = logo_options[selected_logo]
+                image_path = get_logo_path(opacity)
 
                 with open(image_path, "rb") as f:
 
