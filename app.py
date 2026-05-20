@@ -72,7 +72,7 @@ mode = st.selectbox(
 opacity = st.slider(
     "شفافية النص",
     min_value=0.01,
-    max_value=1.0,
+    max_value=0.50,
     value=0.10
 )
 
