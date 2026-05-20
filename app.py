@@ -39,7 +39,7 @@ mode = st.selectbox(
     [
         "في الزاوية",
         "كامل الصفحة",
-        "تكراري مائل"
+        "تكراري"
     ]
 )
 
@@ -188,7 +188,7 @@ def insert_watermark(
     # ADAPTIVE DIAGONAL
     # =========================
 
-    elif mode == "تكراري مائل":
+    elif mode == "تكراري":
 
         x = 0
 
