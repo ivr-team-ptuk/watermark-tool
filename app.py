@@ -49,10 +49,7 @@ watermark_type = st.selectbox(
     ["نص", "شعار"]
 )
 
-watermark_text = st.text_input(
-    "نص العلامة المائية",
-    value="IVR TEAM"
-)
+watermark_text = "IVR TEAM"
 
 selected_logo = None
 
