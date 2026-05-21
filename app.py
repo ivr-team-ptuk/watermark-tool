@@ -1,4 +1,3 @@
-<<<<<<< HEAD:pages/1_تعليم_الملفات.py
 import streamlit as st
 import fitz
 import math
