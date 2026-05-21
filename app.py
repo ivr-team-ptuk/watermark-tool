@@ -936,4 +936,8 @@ if st.button("إنشاء وتحميل"):
                 (index + 1) / total_files
             )
 
+<<<<<<< HEAD
         st.success("جاهز 🔥")
+=======
+        st.success("جاهز 🔥")
+>>>>>>> 8365eabf9a05cff7d959c85568163c673c0af5b8
