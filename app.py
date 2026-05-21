@@ -4,7 +4,6 @@ import math
 import io
 import base64
 from PIL import Image
-from streamlit_pdf_viewer import pdf_viewer
 
 # =========================
 # PAGE CONFIG
