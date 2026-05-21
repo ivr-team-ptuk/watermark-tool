@@ -937,5 +937,4 @@ if st.button("إنشاء وتحميل"):
                 (index + 1) / total_files
             )
 
->>>>>>> parent of 1b3826a (Update app.py):app.py
         st.success("جاهز 🔥")
