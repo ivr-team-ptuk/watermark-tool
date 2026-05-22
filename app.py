@@ -46,7 +46,7 @@ controls_col, preview_col = st.columns(
 
 with controls_col:
 
-    st.markdown('<div class="ivr-card">', unsafe_allow_html=True)
+    # st.markdown('<div class="ivr-card">', unsafe_allow_html=True)
 
     uploaded_pdfs = st.file_uploader(
         "رفع ملفات PDF",
@@ -366,10 +366,10 @@ def insert_watermark(
 
 with preview_col:
 
-    st.markdown(
-        '<div class="preview-pane">',
-        unsafe_allow_html=True
-    )
+    # st.markdown(
+    #     '<div class="preview-pane">',
+    #     unsafe_allow_html=True
+    # )
 
     st.subheader("المعاينة المباشرة")
 
