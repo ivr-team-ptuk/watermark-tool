@@ -27,7 +27,7 @@ with open("styles/style.css", encoding="utf-8") as f:
 # ROW 1 - NAVBAR
 st.markdown("""
 <div class="ivr-navbar">
-    <a href="https://ivr-home.streamlit.app" target="_blank">Home</a>
+    <a href="https://ivr-home-page.streamlit.app" target="_blank">Home</a>
     <a href="https://ivr-merge-tool.streamlit.app" target="_blank">Merge PDF</a>
     <a href="https://ivr-watermark-tool.streamlit.app" target="_blank">Watermark PDF</a>
     <a href="https://ivr-imagetopdf-tool.streamlit.app" target="_blank">Image to PDF</a>
