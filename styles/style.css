@@ -365,3 +365,16 @@ MOBILE
         justify-content: center;
     }
 }
+
+/* =========================
+FOOTER
+========================= */
+
+.footer {
+
+    text-align: center;
+
+    padding: 40px 0 10px 0;
+
+    color: rgba(255,255,255,0.5);
+}
