@@ -11,6 +11,7 @@ from PIL import Image
 
 st.set_page_config(
     page_title="أداة تعليم الملفات - IVR",
+    page_icon="Black_Square-01.svg",
     layout="wide"
 )
 
