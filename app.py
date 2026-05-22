@@ -10,7 +10,8 @@ from PIL import Image
 # =========================
 
 st.set_page_config(
-    page_title="أداة تعليم الملفات - IVR",
+    page_title="."
+    "أداة تعليم الملفات - IVR",
     layout="wide"
 )
 
