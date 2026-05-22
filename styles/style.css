@@ -228,7 +228,7 @@ NAVBAR
     z-index: 9999;
 
     display: flex;
-    align-items: center;
+    align-items: center !important;
     gap: 12px;
 
     padding: 14px 18px;
