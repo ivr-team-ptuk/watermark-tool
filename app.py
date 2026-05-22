@@ -11,41 +11,58 @@ from PIL import Image
 
 st.set_page_config(
     page_title="أداة تعليم الملفات - IVR",
-    layout="centered"
+    layout="wide"
 )
 
-st.title("تعليم ملفات PDF - IVR Scientific")
-st.caption("يتم تحديث المعاينة تلقائيًا عند تغيير الإعدادات")
+# =========================
+# LOAD CSS
+# =========================
+
+with open("style.css", encoding="utf-8") as f:
+    st.markdown(
+        f"<style>{f.read()}</style>",
+        unsafe_allow_html=True
+    )
+
+# =========================
+# HEADER
+# =========================
+
+st.title("تعليم ملفات PDF")
+st.caption("أضف علامة مائية احترافية مع معاينة مباشرة")
 
 # =========================
 # LAYOUT
 # =========================
 
 controls_col, preview_col = st.columns(
-    [1, 1.2]
+    [1, 1.2],
+    gap="large"
 )
 
 # =========================
-# UI
+# CONTROLS CARD
 # =========================
+
 with controls_col:
+
+    st.markdown('<div class="ivr-card">', unsafe_allow_html=True)
 
     uploaded_pdfs = st.file_uploader(
         "رفع ملفات PDF",
         type=["pdf"],
-        accept_multiple_files=True
+        accept_multiple_files=True,
+        help="يمكنك رفع عدة ملفات دفعة واحدة"
     )
 
-with controls_col:
+    st.markdown("<br>", unsafe_allow_html=True)
 
     watermark_type = st.selectbox(
         "نوع العلامة المائية",
         ["نص", "شعار"]
     )
 
-watermark_text = "IVR TEAM"
-
-with controls_col:
+    watermark_text = "IVR TEAM"
 
     mode = st.selectbox(
         "الوضعية",
@@ -56,12 +73,12 @@ with controls_col:
         ]
     )
 
-# =========================
-# OPACITY SLIDER
-# =========================
+    # =========================
+    # OPACITY
+    # =========================
 
-if watermark_type == "نص":
-    with controls_col:
+    if watermark_type == "نص":
+
         opacity = st.slider(
             "شفافية النص",
             min_value=0.01,
@@ -69,14 +86,34 @@ if watermark_type == "نص":
             value=0.10
         )
 
-else:
-    with controls_col:
+    else:
+
         opacity = st.slider(
             "شفافية الشعار",
             min_value=0.01,
             max_value=1.00,
             value=0.10
         )
+
+    # =========================
+    # EXCLUDED PAGES
+    # =========================
+
+    st.markdown("### الصفحات المستثناة")
+
+    exclude_input = st.text_area(
+        "أدخل الصفحات أو النطاقات",
+        placeholder=
+        "مثال:\n"
+        "2\n"
+        "5-8\n"
+        "11\n"
+        "15-20",
+        height=180,
+        label_visibility="collapsed"
+    )
+
+    st.markdown("</div>", unsafe_allow_html=True)
 
 # =========================
 # HELPERS
@@ -85,9 +122,8 @@ else:
 def calculate_rotation(width, height):
 
     angle_rad = math.atan(height / width)
-    angle_deg = math.degrees(angle_rad)
 
-    return angle_deg
+    return math.degrees(angle_rad)
 
 def calculate_font_size(width, height):
 
@@ -98,261 +134,242 @@ def calculate_font_size(width, height):
 # =========================
 # GET LOGO PATH
 # =========================
-with controls_col:
-    def get_logo_path(opacity):
 
-        percentage = int(opacity * 100)
+def get_logo_path(opacity):
 
-        if percentage < 1:
-            percentage = 1
+    percentage = int(opacity * 100)
 
-        if percentage > 100:
-            percentage = 100
+    percentage = max(1, min(100, percentage))
 
-        return f"logos/logo_{percentage}.png"
+    return f"logos/logo_{percentage}.png"
+
+# =========================
+# PARSE EXCLUDED PAGES
+# =========================
+
+def parse_excluded_pages(text):
+
+    excluded = set()
+
+    lines = text.splitlines()
+
+    for line in lines:
+
+        line = line.strip()
+
+        if not line:
+            continue
+
+        if "-" in line:
+
+            try:
+
+                start, end = line.split("-")
+
+                start = int(start.strip())
+                end = int(end.strip())
+
+                for page in range(start, end + 1):
+
+                    excluded.add(page)
+
+            except:
+                pass
+
+        else:
+
+            try:
+
+                excluded.add(int(line))
+
+            except:
+                pass
+
+    return excluded
+
+excluded_pages = parse_excluded_pages(
+    exclude_input
+)
 
 # =========================
 # WATERMARK FUNCTION
 # =========================
-with controls_col:
-    def insert_watermark(
-        page,
-        wm_type,
-        wm_text,
-        opacity,
-        mode,
-        image_bytes=None
-    ):
 
-        rect = page.rect
+def insert_watermark(
+    page,
+    wm_type,
+    wm_text,
+    opacity,
+    mode,
+    image_bytes=None
+):
 
-        w = rect.width
-        h = rect.height
+    rect = page.rect
 
-        rotation = calculate_rotation(w, h)
+    w = rect.width
+    h = rect.height
 
-        font_size = calculate_font_size(w, h)
+    rotation = calculate_rotation(w, h)
 
-        matrix = fitz.Matrix(1,1).prerotate(rotation)
+    font_size = calculate_font_size(w, h)
 
-        # =========================
-        # DRAW TEXT
-        # =========================
+    matrix = fitz.Matrix(1,1).prerotate(rotation)
 
-        def draw_text(p, fs, morph_matrix=None):
+    # =========================
+    # DRAW TEXT
+    # =========================
 
-            page.insert_text(
-                p,
-                wm_text,
-                fontsize=fs,
-                color=(1,0,0),
-                fill_opacity=opacity,
-                morph=(
-                    (fitz.Point(*p), morph_matrix)
-                    if morph_matrix
-                    else None
+    def draw_text(p, fs, morph_matrix=None):
+
+        page.insert_text(
+            p,
+            wm_text,
+            fontsize=fs,
+            color=(1,0,0),
+            fill_opacity=opacity,
+            morph=(
+                (fitz.Point(*p), morph_matrix)
+                if morph_matrix
+                else None
+            )
+        )
+
+    # =========================
+    # DRAW IMAGE
+    # =========================
+
+    def draw_image(r):
+
+        page.insert_image(
+            r,
+            stream=image_bytes,
+            overlay=True,
+            keep_proportion=True
+        )
+
+    # =========================
+    # CORNER MODE
+    # =========================
+
+    if mode == "في الزاوية":
+
+        base_size = min(w, h)
+
+        margin = base_size * 0.04
+
+        logo_size = base_size * 0.14
+
+        x = w - logo_size - margin
+        y = h - logo_size - margin
+
+        if wm_type == "نص":
+
+            draw_text(
+                (x, y),
+                base_size * 0.035
+            )
+
+        else:
+
+            draw_image(
+                fitz.Rect(
+                    x,
+                    y,
+                    x + logo_size,
+                    y + logo_size
                 )
             )
 
-        # =========================
-        # DRAW IMAGE
-        # =========================
+    # =========================
+    # REPEATED MODE
+    # =========================
 
-        def draw_image(r):
+    elif mode == "تكراري":
 
-            page.insert_image(
-                r,
-                stream=image_bytes,
-                overlay=True,
-                keep_proportion=True
-            )
+        base_size = min(w, h)
 
-        # =========================
-        # CORNERS MODE
-        # =========================
+        spacing_x = base_size * 0.32
+        spacing_y = base_size * 0.22
 
-        if mode == "في الزاوية":
+        item_size = base_size * 0.06
 
-            points = [
-                (w-150, h-120)
-            ]
+        x = -spacing_x
 
-            for p in points:
+        while x < w + spacing_x:
+
+            y = -spacing_y
+
+            while y < h + spacing_y:
 
                 if wm_type == "نص":
 
                     draw_text(
-                        p,
-                        font_size/2
+                        (x, y),
+                        item_size,
+                        matrix
                     )
 
                 else:
 
                     draw_image(
                         fitz.Rect(
-                            p[0],
-                            p[1],
-                            p[0]+120,
-                            p[1]+120
+                            x,
+                            y,
+                            x + item_size * 2.2,
+                            y + item_size * 2.2
                         )
                     )
 
-        # =========================
-        # ADAPTIVE DIAGONAL
-        # =========================
+                y += spacing_y
 
-        elif mode == "تكراري":
+            x += spacing_x
 
-            x = 0
+    # =========================
+    # FULL PAGE
+    # =========================
 
-            while x < w:
+    elif mode == "كامل الصفحة":
 
-                y = 0
+        diagonal = math.sqrt(w**2 + h**2)
 
-                while y < h:
+        font_size = diagonal / (len(wm_text) * 0.6)
 
-                    if wm_type == "نص":
+        start_point = (
+            font_size / 2,
+            h
+        )
 
-                        draw_text(
-                            (x,y),
-                            font_size,
-                            matrix
-                        )
+        if wm_type == "نص":
 
-                    else:
-
-                        size = font_size * 3
-
-                        draw_image(
-                            fitz.Rect(
-                                x,
-                                y,
-                                x+size,
-                                y+size
-                            )
-                        )
-
-                    y += 120
-
-                x += 180
-
-        # =========================
-        # FULL PAGE
-        # =========================
-
-        elif mode == "كامل الصفحة":
-
-            diagonal = math.sqrt(w**2 + h**2)
-
-            font_size = diagonal / (len(wm_text) * 0.6)
-
-            start_point = (
-                font_size/2,
-                h
+            draw_text(
+                start_point,
+                font_size * 0.85,
+                matrix
             )
 
-            if wm_type == "نص":
+        else:
 
-                draw_text(
-                    start_point,
-                    font_size * 0.85,
-                    matrix
+            margin = min(w, h) * 0.06
+
+            draw_image(
+                fitz.Rect(
+                    margin,
+                    margin,
+                    w - margin,
+                    h - margin
                 )
-
-            else:
-
-                margin = 40
-
-                draw_image(
-                    fitz.Rect(
-                        margin,
-                        margin,
-                        w - margin,
-                        h - margin
-                    )
-                )
-
-    # =========================
-    # PARSE EXCLUDED PAGES
-    # =========================
-
-with controls_col:
-
-    def parse_excluded_pages(text):
-
-        excluded = set()
-
-        lines = text.splitlines()
-
-        for line in lines:
-
-            line = line.strip()
-
-            if not line:
-                continue
-
-            # =========================
-            # RANGE
-            # =========================
-
-            if "-" in line:
-
-                try:
-
-                    start, end = line.split("-")
-
-                    start = int(start.strip())
-                    end = int(end.strip())
-
-                    for page in range(start, end + 1):
-
-                        excluded.add(page)
-
-                except:
-                    pass
-
-            # =========================
-            # SINGLE PAGE
-            # =========================
-
-            else:
-
-                try:
-
-                    excluded.add(int(line))
-
-                except:
-                    pass
-
-        return excluded
+            )
 
 # =========================
-# EXCLUDED PAGES
-# =========================
-with controls_col:
-
-    exclude_input = st.text_area(
-        "الصفحات المستثناة",
-        placeholder=
-        "مثال:\n"
-        "2\n"
-        "5-8\n"
-        "11\n"
-        "15-20"
-    )
-
-with controls_col:
-    excluded_pages = parse_excluded_pages(
-        exclude_input
-    )
-
-# =========================
-# LIVE PREVIEW
+# PREVIEW
 # =========================
 
 with preview_col:
 
-    st.divider()
+    st.markdown(
+        '<div class="preview-pane">',
+        unsafe_allow_html=True
+    )
 
     st.subheader("المعاينة المباشرة")
 
@@ -371,30 +388,20 @@ with preview_col:
 
             total_pages = len(preview_doc)
 
-            # =========================
-            # PAGE SELECTOR
-            # =========================
-            with controls_col:
-                st.markdown("### اختر الصفحة التي تريد عرضها")
+            preview_page_number = st.slider(
+                "التنقل بين الصفحات",
+                min_value=1,
+                max_value=total_pages,
+                value=1
+            )
 
-                preview_page_number = st.slider(
-                    " التنقل السريع بين الصفحات",
-                    min_value=1,
-                    max_value=total_pages,
-                    value=1
-                )
-            with controls_col:
-                preview_page_number = st.number_input(
-                    "أو اكتب رقم الصفحة التي تريد عرضها",
-                    min_value=1,
-                    max_value=total_pages,
-                    value=preview_page_number,
-                    step=1
-                )
-
-            # =========================
-            # GET PAGE
-            # =========================
+            preview_page_number = st.number_input(
+                "رقم الصفحة",
+                min_value=1,
+                max_value=total_pages,
+                value=preview_page_number,
+                step=1
+            )
 
             preview_page = preview_doc[
                 preview_page_number - 1
@@ -430,7 +437,7 @@ with preview_col:
                 )
 
             # =========================
-            # CONVERT TO IMAGE
+            # PAGE IMAGE
             # =========================
 
             pix = preview_page.get_pixmap(
@@ -442,10 +449,6 @@ with preview_col:
                 [pix.width, pix.height],
                 pix.samples
             )
-
-            # =========================
-            # SHOW IMAGE
-            # =========================
 
             st.image(
                 img,
@@ -463,11 +466,15 @@ with preview_col:
 
         st.info("قم برفع ملف PDF لرؤية المعاينة.")
 
+    st.markdown("</div>", unsafe_allow_html=True)
+
 # =========================
 # PROCESS BUTTON
 # =========================
 
 with controls_col:
+
+    st.markdown("<br>", unsafe_allow_html=True)
 
     if st.button("إنشاء وتحميل"):
 
@@ -476,8 +483,6 @@ with controls_col:
             st.error("قم بتحميل ملفات PDF أولاً")
 
         else:
-
-            st.success("يتم تعليم الملفات...")
 
             progress = st.progress(0)
 
@@ -525,7 +530,7 @@ with controls_col:
                     )
 
                 # =========================
-                # SAVE OUTPUT
+                # SAVE
                 # =========================
 
                 output_pdf = io.BytesIO()
@@ -534,20 +539,12 @@ with controls_col:
 
                 output_pdf.seek(0)
 
-                # =========================
-                # FILE NAME
-                # =========================
-
                 original_name = uploaded_file.name
 
                 new_name = original_name.replace(
                     ".pdf",
                     "_معلَّم.pdf"
                 )
-
-                # =========================
-                # AUTO DOWNLOAD LINK
-                # =========================
 
                 b64 = base64.b64encode(
                     output_pdf.read()
@@ -565,12 +562,8 @@ with controls_col:
                     unsafe_allow_html=True
                 )
 
-                # =========================
-                # UPDATE PROGRESS
-                # =========================
-
                 progress.progress(
                     (index + 1) / total_files
                 )
 
-            st.success("جاهز 🔥")
+            st.success("تم تعليم الملفات بنجاح 🔥")

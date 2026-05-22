@@ -1,0 +1,204 @@
+@import url('https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap');
+
+:root {
+
+    --primary: #FF5B04;
+    --primary-hover: #e65100;
+
+    --secondary: #075056;
+
+    --bg: #0c5157;
+    --bg-dark: #08393d;
+
+    --surface: rgba(255,255,255,0.06);
+
+    --surface-2: rgba(255,255,255,0.03);
+
+    --border: rgba(255,255,255,0.12);
+
+    --text: #FFFFFF;
+
+    --text-muted: #d9d9d9;
+
+    --shadow:
+        0 8px 24px rgba(0,0,0,0.25);
+
+    --radius: 20px;
+}
+
+html, body, [class*="css"] {
+
+    font-family: 'Almarai', sans-serif;
+}
+
+.stApp {
+
+    background:
+        linear-gradient(
+            135deg,
+            #0c5157,
+            #08393d
+        );
+
+    color: var(--text);
+}
+
+/* =========================
+SIDEBAR
+========================= */
+
+section[data-testid="stSidebar"] {
+
+    background:
+        rgba(0,0,0,0.18);
+
+    border-left:
+        1px solid var(--border);
+
+    backdrop-filter: blur(14px);
+}
+
+/* =========================
+CARDS
+========================= */
+
+.block-container {
+
+    padding-top: 2rem;
+}
+
+.ivr-card {
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    padding: 24px;
+
+    backdrop-filter: blur(12px);
+
+    box-shadow: var(--shadow);
+}
+
+/* =========================
+BUTTONS
+========================= */
+
+.stButton > button {
+
+    width: 100%;
+
+    border-radius: 16px;
+
+    border: none;
+
+    background: var(--primary);
+
+    color: white;
+
+    font-weight: bold;
+
+    padding: 14px;
+
+    transition: 0.25s;
+}
+
+.stButton > button:hover {
+
+    background: var(--primary-hover);
+
+    transform: translateY(-2px);
+}
+
+/* =========================
+INPUTS
+========================= */
+
+.stTextInput input,
+.stNumberInput input,
+.stTextArea textarea,
+.stSelectbox div[data-baseweb="select"] {
+
+    background:
+        rgba(255,255,255,0.06) !important;
+
+    border:
+        1px solid var(--border) !important;
+
+    border-radius: 14px !important;
+
+    color: white !important;
+}
+
+/* =========================
+UPLOAD AREA
+========================= */
+
+[data-testid="stFileUploader"] {
+
+    border:
+        2px dashed rgba(255,255,255,0.18);
+
+    border-radius: 24px;
+
+    padding: 30px;
+
+    background:
+        rgba(255,255,255,0.03);
+
+    transition: 0.25s;
+}
+
+[data-testid="stFileUploader"]:hover {
+
+    border-color: var(--primary);
+
+    background:
+        rgba(255,255,255,0.05);
+}
+
+/* =========================
+SLIDER
+========================= */
+
+.stSlider {
+
+    padding-top: 10px;
+}
+
+/* =========================
+PREVIEW
+========================= */
+
+.preview-pane {
+
+    background: rgba(255,255,255,0.04);
+
+    border: 1px solid var(--border);
+
+    border-radius: 24px;
+
+    padding: 20px;
+
+    box-shadow: var(--shadow);
+
+    position: sticky;
+
+    top: 20px;
+}
+
+/* =========================
+HEADERS
+========================= */
+
+h1, h2, h3 {
+
+    color: white;
+}
+
+p, span, label {
+
+    color: var(--text-muted);
+}
