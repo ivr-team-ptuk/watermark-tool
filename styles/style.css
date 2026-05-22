@@ -31,6 +31,15 @@ html, body, [class*="css"] {
     font-family: 'Almarai', sans-serif;
 }
 
+html, body, [data-testid="stAppViewContainer"] {
+    direction: rtl;
+    text-align: right;
+}
+
+* {
+    unicode-bidi: plaintext;
+}
+
 .stApp {
 
     background:
