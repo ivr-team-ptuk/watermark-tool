@@ -228,7 +228,7 @@ NAVBAR
     z-index: 9999;
 
     display: flex;
-    align-items: center !important;
+    align-items: center;
     gap: 12px;
 
     padding: 14px 18px;
@@ -272,4 +272,96 @@ NAVBAR
 
 .ivr-navbar a {
     display: inline-block;
+}
+
+/* =========================
+NAVBAR
+========================= */
+
+.ivr-navbar {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 18px 24px;
+
+    margin-bottom: 20px;
+
+    border-radius: 20px;
+
+    background: rgba(255,255,255,0.05);
+
+    border: 1px solid rgba(255,255,255,0.08);
+
+    backdrop-filter: blur(12px);
+}
+
+.nav-logo {
+
+    font-size: 22px;
+
+    font-weight: 800;
+
+    color: white;
+}
+
+.nav-links {
+
+    display: flex;
+
+    gap: 12px;
+}
+
+.nav-links a {
+
+    text-decoration: none;
+
+    color: white;
+
+    padding: 10px 18px;
+
+    border-radius: 12px;
+
+    transition: 0.2s;
+}
+
+.nav-links a:hover {
+
+    background: rgba(255,255,255,0.08);
+
+    color: #FF5B04;
+}
+
+/* =========================
+MOBILE
+========================= */
+
+@media (max-width: 900px) {
+
+    .hero h1 {
+
+        font-size: 38px;
+    }
+
+    .hero p {
+
+        font-size: 18px;
+    }
+
+    .ivr-navbar {
+
+        flex-direction: column;
+
+        gap: 14px;
+    }
+
+    .nav-links {
+
+        flex-wrap: wrap;
+
+        justify-content: center;
+    }
 }
