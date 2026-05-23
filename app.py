@@ -285,7 +285,12 @@ with preview_col:
                     key="preview_page",
                 )
             elif total_pages == 2:
-                
+                st.slider(
+                    "التنقل بين الصفحات",
+                    min_value=1,
+                    max_value=total_pages,
+                    key="preview_page",
+                )
                 st.session_state.preview_page = 1
                 
  
