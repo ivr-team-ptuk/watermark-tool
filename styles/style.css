@@ -123,6 +123,7 @@ footer {
     height:       80px;
     object-fit:   contain;
     margin-bottom: 16px;
+    filter:       drop-shadow(0 4px 16px rgba(255, 255, 255, 0.25));
 }
 
 .page-header h1 {
