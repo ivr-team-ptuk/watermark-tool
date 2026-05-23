@@ -1,380 +1,269 @@
 @import url('https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap');
 
+/* =========================
+   VARIABLES
+========================= */
+
 :root {
-
-    --primary: #FF5B04;
-    --primary-hover: #e65100;
-
-    --secondary: #075056;
-
-    --bg: #0c5157;
-    --bg-dark: #08393d;
-
-    --surface: rgba(255,255,255,0.06);
-
-    --surface-2: rgba(255,255,255,0.03);
-
-    --border: rgba(255,255,255,0.12);
-
-    --text: #FFFFFF;
-
-    --text-muted: #d9d9d9;
-
-    --shadow:
-        0 8px 24px rgba(0,0,0,0.25);
-
-    --radius: 20px;
+    --primary:        #FF5B04;
+    --primary-hover:  #e65100;
+    --bg:             #0c5157;
+    --bg-dark:        #08393d;
+    --surface:        rgba(255, 255, 255, 0.06);
+    --border:         rgba(255, 255, 255, 0.12);
+    --text:           #FFFFFF;
+    --text-muted:     #d9d9d9;
+    --shadow:         0 8px 24px rgba(0, 0, 0, 0.25);
+    --radius:         20px;
+    --navbar-h:       68px;
 }
 
-html, body, [class*="css"] {
+/* =========================
+   GLOBAL
+========================= */
 
+*, *::before, *::after {
+    box-sizing: border-box;
     font-family: 'Almarai', sans-serif;
 }
 
-html, body, [data-testid="stAppViewContainer"] {
+/* Streamlit default UI — hide */
+#MainMenu,
+header,
+footer {
+    visibility: hidden;
+}
+
+/* Direction */
+[data-testid="stAppViewContainer"],
+[data-testid="stMain"] {
     direction: rtl;
     text-align: right;
 }
 
-* {
-    unicode-bidi: plaintext;
-}
-
+/* Background */
 .stApp {
-
-    background:
-        linear-gradient(
-            135deg,
-            #0c5157,
-            #08393d
-        );
-
+    background: linear-gradient(135deg, var(--bg), var(--bg-dark));
     color: var(--text);
 }
 
-/* =========================
-SIDEBAR
-========================= */
-
-section[data-testid="stSidebar"] {
-
-    background:
-        rgba(0,0,0,0.18);
-
-    border-left:
-        1px solid var(--border);
-
-    backdrop-filter: blur(14px);
-}
-
-/* =========================
-CARDS
-========================= */
-
+/* Content area — push down to clear fixed navbar */
 .block-container {
-
-    padding-top: 2rem;
-}
-
-.ivr-card {
-
-    background: var(--surface);
-
-    border: 1px solid var(--border);
-
-    border-radius: var(--radius);
-
-    padding: 24px;
-
-    backdrop-filter: blur(12px);
-
-    box-shadow: var(--shadow);
+    padding-top:    calc(var(--navbar-h) + 16px) !important;
+    padding-bottom: 0 !important;
 }
 
 /* =========================
-BUTTONS
+   FIXED NAVBAR
+========================= */
+
+.ivr-navbar {
+    position:   fixed;
+    top:        0;
+    left:       0;
+    right:      0;
+    z-index:    9999;
+    height:     var(--navbar-h);
+
+    display:         flex;
+    justify-content: space-between;
+    align-items:     center;
+
+    padding:         0 32px;
+
+    background:      rgba(8, 57, 61, 0.40);
+    border-bottom:   1px solid var(--border);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+.nav-logo {
+    display:     flex;
+    align-items: center;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+.nav-logo-img {
+    width:       85px;
+    height:      42px;
+    object-fit:  contain;
+}
+
+.nav-links {
+    display: flex;
+    gap:     6px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color:           var(--text-muted);
+    padding:         8px 16px;
+    border-radius:   10px;
+    font-size:       15px;
+    transition:      background 0.2s, color 0.2s;
+}
+
+.nav-links a:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color:      var(--primary);
+}
+
+/* =========================
+   PAGE HEADER (hero)
+========================= */
+
+.page-header {
+    text-align:    center;
+    padding:       28px 0 20px;
+}
+
+.hero-logo {
+    width:        160px;
+    height:       80px;
+    object-fit:   contain;
+    margin-bottom: 16px;
+    filter:       drop-shadow(0 4px 16px rgba(255, 91, 4, 0.25));
+}
+
+.page-header h1 {
+    color:     var(--text);
+    font-size: 30px;
+    margin:    8px 0 4px;
+}
+
+.page-header p {
+    color:     var(--text-muted);
+    font-size: 15px;
+    margin:    0;
+}
+
+/* =========================
+   BUTTONS
 ========================= */
 
 .stButton > button {
-
-    width: 100%;
-
-    border-radius: 16px;
-
-    border: none;
-
-    background: var(--primary);
-
-    color: white;
-
+    width:       100%;
+    border:      none;
+    border-radius: 14px;
+    background:  var(--primary);
+    color:       white;
+    font-family: 'Almarai', sans-serif;
     font-weight: bold;
-
-    padding: 14px;
-
-    transition: 0.25s;
+    font-size:   16px;
+    padding:     13px;
+    cursor:      pointer;
+    transition:  background 0.2s, transform 0.2s;
 }
 
 .stButton > button:hover {
-
     background: var(--primary-hover);
-
-    transform: translateY(-2px);
+    transform:  translateY(-2px);
 }
 
 /* =========================
-INPUTS
+   TEXT INPUTS
 ========================= */
 
-.stTextInput input,
+.stTextInput  input,
 .stNumberInput input,
-.stTextArea textarea,
-.stSelectbox div[data-baseweb="select"] {
-
-    background:
-        rgba(255,255,255,0.06) !important;
-
-    border:
-        1px solid var(--border) !important;
-
-    border-radius: 14px !important;
-
-    color: white !important;
+.stTextArea   textarea {
+    background:    rgba(255, 255, 255, 0.06) !important;
+    border:        1px solid var(--border)   !important;
+    border-radius: 12px                      !important;
+    color:         white                     !important;
+    font-family:   'Almarai', sans-serif     !important;
 }
 
 /* =========================
-UPLOAD AREA
+   FILE UPLOADER
 ========================= */
 
 [data-testid="stFileUploader"] {
-
-    border:
-        2px dashed rgba(255,255,255,0.18);
-
-    border-radius: 24px;
-
-    padding: 30px;
-
-    background:
-        rgba(255,255,255,0.03);
-
-    transition: 0.25s;
+    border:        2px dashed rgba(255, 255, 255, 0.18);
+    border-radius: 20px;
+    padding:       24px;
+    background:    rgba(255, 255, 255, 0.03);
+    transition:    border-color 0.2s, background 0.2s;
 }
 
 [data-testid="stFileUploader"]:hover {
-
     border-color: var(--primary);
-
-    background:
-        rgba(255,255,255,0.05);
+    background:   rgba(255, 255, 255, 0.05);
 }
 
 /* =========================
-SLIDER
+   SLIDER (LTR — required)
 ========================= */
 
 .stSlider {
-    direction: ltr !important;
-    text-align: left !important;
-    unicode-bidi: normal !important;
-    padding-top: 10px;
+    direction:    ltr !important;
+    padding-top:  8px;
 }
 
 /* =========================
-PREVIEW
-========================= */
-
-.preview-pane {
-
-    background: rgba(255,255,255,0.04);
-
-    border: 1px solid var(--border);
-
-    border-radius: 24px;
-
-    padding: 20px;
-
-    box-shadow: var(--shadow);
-
-    position: sticky;
-
-    top: 20px;
-}
-
-/* =========================
-HEADERS
+   TYPOGRAPHY
 ========================= */
 
 h1, h2, h3 {
-
-    color: white;
+    color: var(--text);
 }
 
 p, span, label {
-
     color: var(--text-muted);
 }
 
 /* =========================
-NAVBAR
+   SIDEBAR
 ========================= */
 
-.ivr-navbar {
-
-    position: fixed;
-    top: 50px;
-    left: 0;
-    right: 0;
-
-    z-index: 9999;
-
-    display: flex;
-    align-items: center;
-    gap: 12px;
-
-    padding: 14px 18px;
-
-    border-radius: 0 0 18px 18px;
-
-    background: rgba(255,255,255,0.05);
-
-    border: 1px solid rgba(255,255,255,0.08);
-
-    backdrop-filter: blur(12px);
-
-    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
-}
-
-.ivr-navbar a {
-
-    text-decoration: none;
-
-    color: white;
-
-    font-weight: 700;
-
-    padding: 10px 18px;
-
-    border-radius: 12px;
-
-    transition: 0.2s;
-
-    background: transparent;
-}
-
-.ivr-navbar a:hover {
-
-    background: rgba(255,255,255,0.08);
-
-    color: #FF5B04;
-
-    transform: translateY(-1px);
-}
-
-.ivr-navbar a {
-    display: inline-block;
+section[data-testid="stSidebar"] {
+    background:      rgba(0, 0, 0, 0.18);
+    border-left:     1px solid var(--border);
+    backdrop-filter: blur(14px);
 }
 
 /* =========================
-NAVBAR
-========================= */
-
-.ivr-navbar {
-
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    padding: 18px 24px;
-
-    margin-bottom: 20px;
-
-    border-radius: 20px;
-
-    background: rgba(255,255,255,0.05);
-
-    border: 1px solid rgba(255,255,255,0.08);
-
-    backdrop-filter: blur(12px);
-}
-
-.nav-logo {
-
-    font-size: 22px;
-
-    font-weight: 800;
-
-    color: white;
-}
-
-.nav-links {
-
-    display: flex;
-
-    gap: 12px;
-}
-
-.nav-links a {
-
-    text-decoration: none;
-
-    color: white;
-
-    padding: 10px 18px;
-
-    border-radius: 12px;
-
-    transition: 0.2s;
-}
-
-.nav-links a:hover {
-
-    background: rgba(255,255,255,0.08);
-
-    color: #FF5B04;
-}
-
-/* =========================
-MOBILE
-========================= */
-
-@media (max-width: 900px) {
-
-    .hero h1 {
-
-        font-size: 38px;
-    }
-
-    .hero p {
-
-        font-size: 18px;
-    }
-
-    .ivr-navbar {
-
-        flex-direction: column;
-
-        gap: 14px;
-    }
-
-    .nav-links {
-
-        flex-wrap: wrap;
-
-        justify-content: center;
-    }
-}
-
-/* =========================
-FOOTER
+   FOOTER
 ========================= */
 
 .footer {
-
     text-align: center;
+    padding:    56px 0 20px;
+    color:      rgba(255, 255, 255, 0.38);
+    font-size:  14px;
+}
 
-    padding: 40px 0 10px 0;
+/* =========================
+   MOBILE
+========================= */
 
-    color: rgba(255,255,255,0.5);
+@media (max-width: 768px) {
+
+    .ivr-navbar {
+        padding:    0 16px;
+        flex-wrap:  wrap;
+        height:     auto;
+        padding-top:    10px;
+        padding-bottom: 10px;
+        gap:        8px;
+    }
+
+    :root {
+        --navbar-h: 110px;
+    }
+
+    .nav-links {
+        flex-wrap:       wrap;
+        justify-content: center;
+    }
+
+    .hero-logo {
+        width:  110px;
+        height: 56px;
+    }
+
+    .page-header h1 {
+        font-size: 22px;
+    }
 }
