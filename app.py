@@ -28,8 +28,7 @@ st.set_page_config(
 # =========================
 
 LOGO_URL = (
-    "https://raw.githubusercontent.com/"
-    "ivr-team-ptuk/home-page/main/Black_Square-01.svg"
+    "https://raw.githubusercontent.com/ivr-team-ptuk/home-page/refs/heads/main/Black_Square-01.svg"
 )
 
 # ──────────────────────────────────────────────
