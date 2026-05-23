@@ -284,20 +284,8 @@ with preview_col:
                     step=1,
                     key="preview_page",
                 )
+
             elif total_pages > 2:
-                st.slider(
-                    "التنقل بين الصفحات",
-                    min_value=1,
-                    max_value=total_pages,
-                    key="preview_page",
-                )
-                st.number_input(
-                    "رقم الصفحة",
-                    min_value=1,
-                    max_value=total_pages,
-                    step=1,
-                    key="preview_page",
-                )
                 st.session_state.preview_page = 1
  
             else:
