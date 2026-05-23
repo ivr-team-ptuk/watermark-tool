@@ -88,7 +88,7 @@ footer {
     width:       85px;
     height:      42px;
     object-fit:  contain;
-    filter:       drop-shadow(0 4px 16px rgba(255, 255, 255, 0.40));
+    filter:       drop-shadow(0 4px 16px rgba(255, 255, 255, 0.70));
 }
 
 .nav-links {
