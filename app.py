@@ -270,34 +270,17 @@ with preview_col:
             )
 
             # Slider and number_input share the same session-state key
-            if total_pages > 2:
+            if total_pages > 1:
                 st.slider(
                     "التنقل بين الصفحات",
                     min_value=1,
                     max_value=total_pages,
                     key="preview_page",
                 )
-                st.number_input(
-                    "رقم الصفحة",
-                    min_value=1,
-                    max_value=total_pages,
-                    step=1,
-                    key="preview_page",
-                )
-            elif total_pages == 2:
-                st.slider(
-                    "التنقل بين الصفحات",
-                    min_value=1,
-                    max_value=total_pages,
-                    key="preview_page",
-                )
-                st.session_state.preview_page = 1
-                
- 
             else:
                 st.session_state.preview_page = 1
                 st.caption("الملف يحتوي على صفحة واحدة فقط")
-            
+ 
             current_page = st.session_state.preview_page
 
             # Build a temporary copy so we don't mutate the original bytes
