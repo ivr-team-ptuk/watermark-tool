@@ -291,8 +291,14 @@ with preview_col:
                     max_value=total_pages,
                     key="preview_page",
                 )
+                st.number_input(
+                    "رقم الصفحة",
+                    min_value=1,
+                    max_value=total_pages,
+                    step=1,
+                    key="preview_page",
+                )
                 st.session_state.preview_page = 1
-                st.caption("الملف يحتوي على صفحة واحدة فقط")
  
             else:
                 st.session_state.preview_page = 1
