@@ -284,9 +284,10 @@ with preview_col:
                     step=1,
                     key="preview_page",
                 )
-
-            elif total_pages > 2:
+            elif total_pages == 2:
+                
                 st.session_state.preview_page = 1
+                st.caption("الملف يحتوي على صفحة واحدة فقط")
  
             else:
                 st.session_state.preview_page = 1
