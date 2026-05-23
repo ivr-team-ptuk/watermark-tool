@@ -23,6 +23,14 @@ st.set_page_config(
     layout="wide",
 )
 
+# =========================
+# CONSTANTS
+# =========================
+
+LOGO_URL = (
+    "https://raw.githubusercontent.com/"
+    "ivr-team-ptuk/home-page/main/Black_Square-01.svg"
+)
 
 # ──────────────────────────────────────────────
 # INJECT CSS
@@ -34,37 +42,34 @@ if os.path.exists(_css_path):
         st.markdown(f"<style>{_f.read()}</style>", unsafe_allow_html=True)
 
 
-# ──────────────────────────────────────────────
-# FIXED NAVBAR  (pure markdown — no components.html)
-# ──────────────────────────────────────────────
+# =========================
+# NAVBAR (fixed via CSS — no iframe needed)
+# =========================
 
-st.markdown(
-    """
-    <nav class="ivr-navbar">
-        <a href="https://ivr-home-page.streamlit.app">Home</a>
-        <a href="https://ivr-merge-tool.streamlit.app">Merge PDF</a>
-        <a href="https://ivr-watermark-tool.streamlit.app">Watermark PDF</a>
-        <a href="https://ivr-imagetopdf-tool.streamlit.app">Image to PDF</a>
-    </nav>
-    """,
-    unsafe_allow_html=True,
-)
+st.markdown(f"""
+<nav class="ivr-navbar">
+    <a href="https://ivr-home-page.streamlit.app" class="nav-logo">
+        <img src="{LOGO_URL}" class="nav-logo-img" alt="IVR">
+    </a>
+    <div class="nav-links">
+        <a href="https://ivr-watermark-tool.streamlit.app">تعليم الملفات</a>
+        <a href="https://ivr-merge-tool.streamlit.app">دمج الملفات</a>
+        <a href="https://ivr-imagetopdf-tool.streamlit.app">الصور إلى PDF</a>
+    </div>
+</nav>
+""", unsafe_allow_html=True)
 
+# =========================
+# PAGE HEADER
+# =========================
 
-# ──────────────────────────────────────────────
-# HERO HEADER  (logo + title)
-# ──────────────────────────────────────────────
-
-_logo_svg = "Black_Square-01.svg"
-_hero_left, _hero_right = st.columns([1, 5], gap="small")
-
-with _hero_left:
-    if os.path.exists(_logo_svg):
-        st.image(_logo_svg, width=160)
-
-with _hero_right:
-    st.title("تعليم ملفات PDF")
-    st.caption("أضف علامة مائية احترافية مع معاينة مباشرة")
+st.markdown(f"""
+<div class="page-header">
+    <img src="{LOGO_URL}" class="hero-logo" alt="IVR Logo">
+    <h1>تعليم ملفات PDF</h1>
+    <p>أضف علامة مائية احترافية مع معاينة مباشرة</p>
+</div>
+""", unsafe_allow_html=True)
 
 
 # ──────────────────────────────────────────────
