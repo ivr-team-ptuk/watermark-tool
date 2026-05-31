@@ -323,7 +323,7 @@ if process_clicked:
             )
             doc.close()
 
-            out_name = uploaded_file.name.replace(".pdf")
+            out_name = uploaded_file.name.replace(".pdf", ".pdf")
             b64_data = base64.b64encode(pdf_bytes).decode()
 
             st.markdown(
